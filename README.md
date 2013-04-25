@@ -9,6 +9,7 @@ Usage
   * Add updateable to INSTALLED\_APPS in settings.py:
   * Add updateable.middleware.UpdateableMiddleware to MIDDLEWARE\_CLASSES
   * Add updateable.js to your page, e.g. <script src='{% static "updateable.js" %}'></script>
+  * Load the updateable template tags in your template: {% load updateable %}
   * Add the {% updateable %} template tag around the portion of your template that you want to be auto updated:
 
     <p>Some HTML</p>
