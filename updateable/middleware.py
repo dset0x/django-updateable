@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django.http import HttpResponse
+from updateable import settings
 
 
 class UpdateableMiddleware(object):
+
     def process_request(self, request):
         updateable = bool(request.GET.get('update'))
         hashvals = {}
@@ -12,14 +14,18 @@ class UpdateableMiddleware(object):
             hashes = request.GET.getlist('hash[]')
             for id, hash in zip(ids, hashes):
                 hashvals[id] = hash
-        request._updateable = {
+        updateable_dict = {
             'updateable': bool(request.GET.get('update')),
             'hashes': hashvals,
             'contents': [],
         }
+        setattr(request, settings.UPDATEABLE_REQUEST_OBJECT, updateable_dict)
+
     def process_response(self, request, response):
-        if request._updateable['updateable']:
-            contents = request._updateable['contents']
+        updateable_dict = getattr(request, settings.UPDATEABLE_REQUEST_OBJECT)
+        if updateable_dict['updateable']:
+            contents = updateable_dict['contents']
             content = '<div>%s</div>' % u''.join(contents)
             return HttpResponse(content)
         return response
+

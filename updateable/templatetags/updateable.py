@@ -2,9 +2,10 @@
 
 from hashlib import md5
 from django.template import Library, Node, TemplateSyntaxError
+from .. import settings
+
 
 register = Library()
-
 
 class UpdateableNode(Node):
     def __init__(self, element, nodelist):
@@ -13,10 +14,10 @@ class UpdateableNode(Node):
 
     def render(self, context):
         request = context.get('request')
-        un_nr = context.render_context.get('un_nr', 1)
-        context.render_context['un_nr'] = un_nr + 1
+        updateable_count = context.render_context.get('updateable_count', 1)
+        context.render_context['updateable_count'] = updateable_count + 1
 
-        id = self.get_id(request, un_nr)
+        id = self.get_id(request, updateable_count)
         contents = u''.join(n.render(context) for n in self.nodelist)
         hash = md5(contents).hexdigest()
         rcontext = {
@@ -27,16 +28,16 @@ class UpdateableNode(Node):
         }
         output = u'<%(element)s data-updateable="%(id)s" data-hash="%(hash)s">%(contents)s</%(element)s>' % rcontext
 
-        _ud = request._updateable
-        if _ud['updateable'] and _ud['hashes'].get(id, '') != hash:
-            request._updateable['contents'].append(output)
+        updateable_dict = getattr(request, settings.UPDATEABLE_REQUEST_OBJECT)
+        if updateable_dict['updateable'] and updateable_dict['hashes'].get(id, '') != hash:
+            updateable_dict['contents'].append(output)
         return output
 
-    def get_id(self, request, un_nr):
+    def get_id(self, request, updateable_count):
         if not request:
-            id = un_nr
+            id = updateable_count
         else:
-            id = md5('%d-%s' % (un_nr, request.path)).hexdigest()
+            id = md5('%d-%s' % (updateable_count, request.path)).hexdigest()
         return id
 
 
