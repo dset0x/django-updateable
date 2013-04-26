@@ -7,7 +7,7 @@ from updateable import settings
 class UpdateableMiddleware(object):
 
     def process_request(self, request):
-        updateable = bool(request.GET.get('update'))
+        updateable = bool(request.GET.get(settings.UPDATEABLE_GET_VARIABLE))
         hashvals = {}
         if updateable:
             ids = request.GET.getlist('ids[]')
