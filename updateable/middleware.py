@@ -26,6 +26,10 @@ class UpdateableMiddleware(object):
         if updateable_dict['updateable']:
             contents = updateable_dict['contents']
             content = '<div>%s</div>' % u''.join(contents)
-            return HttpResponse(content)
+            response['Content-length'] = str(len(content))
+            if getattr(response, 'streaming', False):
+                response.streaming_response = (content,)
+            else:
+                response.content = content
         return response
 
