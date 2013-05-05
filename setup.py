@@ -12,5 +12,5 @@ setup(
     url='https://github.com/baldurthoremilsson/django-updateable',
     license='LICENSE',
     description='Automatic updates for portions of templates with {% updateable %} tag',
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
 )
