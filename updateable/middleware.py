@@ -25,7 +25,7 @@ class UpdateableMiddleware(object):
         updateable_dict = getattr(request, settings.UPDATEABLE_REQUEST_OBJECT)
         if updateable_dict['updateable']:
             contents = updateable_dict['contents']
-            content = '<div>%s</div>' % u''.join(contents)
+            content = ''.join(contents)
             response['Content-length'] = str(len(content))
             if getattr(response, 'streaming', False):
                 response.streaming_response = (content,)
