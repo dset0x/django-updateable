@@ -15,7 +15,7 @@ class UpdateableMiddleware(object):
             for id, hash in zip(ids, hashes):
                 hashvals[id] = hash
         updateable_dict = {
-            'updateable': bool(request.GET.get('update')),
+            'updateable': updateable,
             'hashes': hashvals,
             'contents': [],
         }
