@@ -31,5 +31,6 @@ class UpdateableMiddleware(object):
                 response.streaming_response = (content,)
             else:
                 response.content = content
+            response['Cache-control'] = 'no-cache' # Preventing IE bug
         return response
 
