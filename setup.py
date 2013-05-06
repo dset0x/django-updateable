@@ -11,7 +11,7 @@ setup(
     package_data={'updateable': ['static/updateable.js']},
     install_requires=['Django >= 1.3'],
     url='https://github.com/baldurthoremilsson/django-updateable',
-    license='LICENSE',
+    license='BSD',
     description='Automatic updates for portions of templates with {% updateable %} tag',
     long_description=open('README.rst').read(),
 )
