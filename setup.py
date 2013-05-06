@@ -9,6 +9,7 @@ setup(
     author_email='baldur@baldur.biz',
     packages=['updateable', 'updateable.templatetags'],
     package_data={'updateable': ['static/updateable.js']},
+    install_requires=['Django >= 1.3'],
     url='https://github.com/baldurthoremilsson/django-updateable',
     license='LICENSE',
     description='Automatic updates for portions of templates with {% updateable %} tag',
