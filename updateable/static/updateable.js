@@ -24,7 +24,7 @@
       for(var i = 0; i < updateables.length; i++) {
         var updateable = updateables[i];
         var id = updateable.getAttribute('data-updateable');
-        var updated = fragment.querySelector('[data-updateable=' + id + ']');
+        var updated = fragment.querySelector('[data-updateable="' + id + '"]');
         if(updated) {
           updateable.parentNode.replaceChild(updated, updateable);
           settings.callback.call(updated);
