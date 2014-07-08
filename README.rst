@@ -141,3 +141,22 @@ circumstances::
     }
 
 .. _jQuery Mobile: http://jquerymobile.com/
+
+Release history
+---------------
+
+0.2.1
+=====
+Bugfix: IDs of updateable segments that started with numbers caused a bug in
+the Javascript. Many thanks to edtanous_!
+
+.. _edtanous: https://github.com/edtanous
+
+0.2
+===
+Bugfixes, and jQuery is no longer a dependency (except for old browsers).
+
+0.1
+===
+Initial release.
+
