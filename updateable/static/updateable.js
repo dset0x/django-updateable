@@ -35,7 +35,8 @@
   };
 
   var update = function() {
-    var url = '?' + encodeURI(settings.getVariable + '=true');
+    var currUrlParams = new URLSearchParams(window.location.search).toString();
+    var url = '?' + currUrlParams + '&' + encodeURI(settings.getVariable + '=true');
     var updateables = getUpdateables();
     for(var i = 0; i < updateables.length; i++) {
       var updateable = updateables[i];
