@@ -16,7 +16,7 @@
         return;
     if(this.status == 200) {
       var fragment = document.createDocumentFragment();
-      var el = document.createElement('div');
+      var el = document.createElement('template');
       el.innerHTML = this.responseText;
       fragment.appendChild(el);
 
@@ -24,7 +24,7 @@
       for(var i = 0; i < updateables.length; i++) {
         var updateable = updateables[i];
         var id = updateable.getAttribute('data-updateable');
-        var updated = fragment.querySelector('[data-updateable="' + id + '"]');
+        var updated = fragment.firstChild.content.querySelector('[data-updateable="' + id + '"]');
         if(updated) {
           updateable.parentNode.replaceChild(updated, updateable);
           settings.callback.call(updated);
