@@ -19,7 +19,7 @@ class UpdateableNode(Node):
 
         id = self.get_id(request, updateable_count)
         contents = u''.join(n.render(context) for n in self.nodelist)
-        hash = md5(contents).hexdigest()
+        hash = md5(contents.encode()).hexdigest()
         rcontext = {
             'id': id,
             'contents': contents,
@@ -37,7 +37,8 @@ class UpdateableNode(Node):
         if not request:
             id = updateable_count
         else:
-            id = md5('%d-%s' % (updateable_count, request.path)).hexdigest()
+            decoded = '%d-%s' % (updateable_count, request.path)
+            id = md5(decoded.encode()).hexdigest()
         return id
 
 
