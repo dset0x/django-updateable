@@ -3,8 +3,13 @@
 from django.http import HttpResponse
 from updateable import settings
 
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    MiddlewareMixin = object
 
-class UpdateableMiddleware(object):
+
+class UpdateableMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         updateable = bool(request.GET.get(settings.UPDATEABLE_GET_VARIABLE))
