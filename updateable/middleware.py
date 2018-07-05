@@ -26,7 +26,7 @@ class UpdateableMiddleware(object):
         if updateable_dict['updateable']:
             contents = updateable_dict['contents']
             content = ''.join(contents)
-            response['Content-length'] = str(len(content))
+            response['Content-length'] = str(len(content.encode()))
             if getattr(response, 'streaming', False):
                 response.streaming_response = (content,)
             else:
