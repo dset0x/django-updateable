@@ -15,7 +15,7 @@ class UpdateableMiddleware(MiddlewareMixin):
         updateable = bool(request.GET.get(settings.UPDATEABLE_GET_VARIABLE))
         hashvals = {}
         if updateable:
-            ids = request.GET.getlist('ids[]')
+            ids = request.GET.getlist('id[]')
             hashes = request.GET.getlist('hash[]')
             for id, hash in zip(ids, hashes):
                 hashvals[id] = hash
