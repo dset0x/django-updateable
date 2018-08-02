@@ -1,8 +1,9 @@
-(function() {
+window.updateableSettings = (function() {
   var us = window.updateableSettings || {};
   var settings = {
     timeout: us.timeout || 3000,
     callback: us.callback || function() {},
+    autoUpdate: us.autoUpdate || true,
     getVariable: us.getVariable || 'update'
   };
 
@@ -12,6 +13,8 @@
   };
 
   var readyStateChanged = function() {
+    if(!settings.autoUpdate)
+      return;
     if(this.readyState != 4)
         return;
     if(this.status == 200) {
@@ -35,6 +38,11 @@
   };
 
   var update = function() {
+    if(!settings.autoUpdate) {
+      setTimeout(update, settings.timeout);
+      return;
+    }
+
     var currUrlParams = new URLSearchParams(window.location.search).toString();
     var url = '?' + currUrlParams + '&' + encodeURI(settings.getVariable + '=true');
     var updateables = getUpdateables();
@@ -57,4 +65,6 @@
     document.addEventListener('DOMContentLoaded', update);
   else
     window.attachEvent('onload', update);
+
+  return settings;
 })();
