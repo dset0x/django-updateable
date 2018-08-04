@@ -2,23 +2,24 @@ window.updateableSettings = (function() {
   var us = window.updateableSettings || {};
   var settings = {
     timeout: us.timeout || 3000,
-    requestTimeout: us.requestTimeout || 0,
+    requestTimeout: us.requestTimeout || 3000,
     callback: us.callback || function() {},
     autoUpdate: us.autoUpdate || true,
     getVariable: us.getVariable || 'update'
   };
 
-
   var getUpdateables = function() {
     return document.querySelectorAll('[data-updateable]');
   };
 
+  var retry = function() {
+      setTimeout(update, settings.timeout);
+  }
+
   var readyStateChanged = function() {
-    if(!settings.autoUpdate)
-      return;
     if(this.readyState != 4)
-        return;
-    if(this.status == 200) {
+      return;
+    if(this.status == 200 && settings.autoUpdate) {
       var fragment = document.createDocumentFragment();
       var el = document.createElement('template');
       el.innerHTML = this.responseText;
@@ -35,15 +36,14 @@ window.updateableSettings = (function() {
         }
       }
     }
-    setTimeout(update, settings.timeout)
+    retry();
   };
 
   var update = function() {
     if(!settings.autoUpdate) {
-      setTimeout(update, settings.timeout);
+      retry();
       return;
     }
-
     var currUrlParams = new URLSearchParams(window.location.search).toString();
     var url = '?' + currUrlParams + '&' + encodeURI(settings.getVariable + '=true');
     var updateables = getUpdateables();
