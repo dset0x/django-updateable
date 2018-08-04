@@ -2,6 +2,7 @@ window.updateableSettings = (function() {
   var us = window.updateableSettings || {};
   var settings = {
     timeout: us.timeout || 3000,
+    requestTimeout: us.requestTimeout || 0,
     callback: us.callback || function() {},
     autoUpdate: us.autoUpdate || true,
     getVariable: us.getVariable || 'update'
@@ -56,6 +57,7 @@ window.updateableSettings = (function() {
     var httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = readyStateChanged;
     httpRequest.open('GET', url);
+    httpRequest.timeout = settings.requestTimeout;
     httpRequest.send();
   };
 
