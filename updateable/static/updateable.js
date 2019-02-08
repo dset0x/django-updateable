@@ -1,6 +1,7 @@
 window.updateableSettings = (function() {
   var us = window.updateableSettings || {};
   var settings = {
+    timer: null,
     timeout: us.timeout || 3000,
     requestTimeout: us.requestTimeout || 3000,
     callback: us.callback || function() {},
@@ -12,14 +13,37 @@ window.updateableSettings = (function() {
     return document.querySelectorAll('[data-updateable]');
   };
 
+  var pause = function() {
+    settings.autoUpdate = false;
+    if (settings.timer !== null) {
+      clearTimeout(settings.timer);
+      settings.timer = null;
+    }
+  }
+
+  var resume = function(timeout) {
+    pause();
+    settings.autoUpdate = true;
+    if (timeout !== undefined) {
+      settings.timeout = timeout;
+    }
+    if (settings.timer === null) {
+      update();
+    }
+  }
+
   var retry = function() {
-      setTimeout(update, settings.timeout);
+    if (settings.autoUpdate) {
+      settings.timer = setTimeout(update, settings.timeout);
+    }
   }
 
   var readyStateChanged = function() {
+    if(!settings.autoUpdate)
+      return;
     if(this.readyState != 4)
       return;
-    if(this.status == 200 && settings.autoUpdate) {
+    if(this.status == 200) {
       const parser = new DOMParser();
       if (/\S/.test(this.responseText)) {
 
@@ -51,10 +75,8 @@ window.updateableSettings = (function() {
   };
 
   var update = function() {
-    if(!settings.autoUpdate) {
-      retry();
+    if(!settings.autoUpdate)
       return;
-    }
     var currUrlParams = new URLSearchParams(window.location.search).toString();
     var url = '?' + currUrlParams + '&' + encodeURI(settings.getVariable + '=true');
     var updateables = getUpdateables();
@@ -73,11 +95,13 @@ window.updateableSettings = (function() {
   };
 
   if(document.readyState === 'complete')
-    setTimeout(update);
+    resume();
   else if(document.addEventListener)
     document.addEventListener('DOMContentLoaded', update);
   else
     window.attachEvent('onload', update);
 
+  settings.pause = pause;
+  settings.resume = resume;
   return settings;
 })();
